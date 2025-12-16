@@ -1,0 +1,121 @@
+version: "3.8"
+
+services:
+  # =======================
+  # Databases
+  # =======================
+
+  auth-db:
+    image: mysql:8.0
+    container_name: auth-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: user_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user123
+    ports:
+      - "33061:3306"
+    volumes:
+      - auth-db-data:/var/lib/mysql
+    command:
+      --innodb-buffer-pool-size=64M
+      --max-connections=50
+      --performance-schema=OFF
+    mem_limit: 256m
+    restart: unless-stopped
+
+  product-db:
+    image: mysql:8.0
+    container_name: product-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: product_db
+      MYSQL_USER: product
+      MYSQL_PASSWORD: product123
+    ports:
+      - "33062:3306"
+    volumes:
+      - product-db-data:/var/lib/mysql
+    command:
+      --innodb-buffer-pool-size=64M
+      --max-connections=50
+      --performance-schema=OFF
+    mem_limit: 256m
+    restart: unless-stopped
+
+  order-db:
+    image: mysql:8.0
+    container_name: order-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: order_db
+      MYSQL_USER: order
+      MYSQL_PASSWORD: order123
+    ports:
+      - "33063:3306"
+    volumes:
+      - order-db-data:/var/lib/mysql
+    command:
+      --innodb-buffer-pool-size=64M
+      --max-connections=50
+      --performance-schema=OFF
+    mem_limit: 256m
+    restart: unless-stopped
+
+  # =======================
+  # Microservices
+  # =======================
+
+  auth-service:
+    build: ./auth_service
+    container_name: auth-service
+    ports:
+      - "3001:3001"
+    depends_on:
+      - auth-db
+    restart: unless-stopped
+
+  product-service:
+    build: ./product_service
+    container_name: product-service
+    ports:
+      - "3002:3002"
+    depends_on:
+      - product-db
+    restart: unless-stopped
+
+  order-service:
+    build: ./order_service
+    container_name: order-service
+    ports:
+      - "3003:3003"
+    depends_on:
+      - order-db
+    restart: unless-stopped
+
+  # =======================
+  # API Gateway (Nginx)
+  # =======================
+
+  nginx:
+    image: nginx:latest
+    container_name: api-gateway
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./web:/usr/share/nginx/html
+    depends_on:
+      - auth-service
+      - product-service
+      - order-service
+    restart: unless-stopped
+
+# =======================
+# Volumes
+# =======================
+
+volumes:
+  auth-db-data:
+  product-db-data:
+  order-db-data:

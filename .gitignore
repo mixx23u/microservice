@@ -1,0 +1,19 @@
+# Environment
+.env
+.env.*
+
+# Docker
+db_data/
+**/node_modules
+**/dist
+**/__pycache__
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+
+#ide
+.vscode/
+.idea/
