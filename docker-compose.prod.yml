@@ -70,7 +70,7 @@ services:
   # =======================
 
   auth-service:
-    image: YOUR_DOCKER_USERNAME/auth-service:latest  # ⚠️ Thay YOUR_DOCKER_USERNAME
+    image: mixx23u/auth-service:latest  # ⚠️ Thay YOUR_DOCKER_USERNAME
     container_name: auth-service
     ports:
       - "3001:3001"
@@ -79,7 +79,7 @@ services:
     restart: unless-stopped
 
   product-service:
-    image: YOUR_DOCKER_USERNAME/product-service:latest  # ⚠️ Thay YOUR_DOCKER_USERNAME
+    image: mixx23u/product-service:latest  # ⚠️ Thay YOUR_DOCKER_USERNAME
     container_name: product-service
     ports:
       - "3002:3002"
@@ -88,7 +88,7 @@ services:
     restart: unless-stopped
 
   order-service:
-    image: YOUR_DOCKER_USERNAME/order-service:latest  # ⚠️ Thay YOUR_DOCKER_USERNAME
+    image: mixx23u/order-service:latest  # ⚠️ Thay YOUR_DOCKER_USERNAME
     container_name: order-service
     ports:
       - "3003:3003"

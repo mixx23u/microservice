@@ -89,44 +89,25 @@ Sau đó copy public key lên server:
 ssh-copy-id username@server-ip
 ```
 
-### Bước 3: Cập nhật docker-compose.yml
+### Bước 3: Cập nhật docker-compose.prod.yml
 
-Sửa file `docker-compose.yml` để dùng images từ Docker Hub thay vì build local:
+File `docker-compose.prod.yml` đã được tạo sẵn cho production. 
 
-```yaml
-services:
-  auth-service:
-    image: YOUR_DOCKER_USERNAME/auth-service:latest
-    # build: ./auth_service  # Comment dòng này
-    container_name: auth-service
-    ports:
-      - "3001:3001"
-    depends_on:
-      - auth-db
-    restart: unless-stopped
+**Chỉ cần thay `YOUR_DOCKER_USERNAME`** bằng username Docker Hub của bạn:
 
-  product-service:
-    image: YOUR_DOCKER_USERNAME/product-service:latest
-    # build: ./product_service  # Comment dòng này
-    container_name: product-service
-    ports:
-      - "3002:3002"
-    depends_on:
-      - product-db
-    restart: unless-stopped
+```bash
+# Mở file docker-compose.prod.yml
+# Tìm và thay tất cả YOUR_DOCKER_USERNAME bằng username của bạn
 
-  order-service:
-    image: YOUR_DOCKER_USERNAME/order-service:latest
-    # build: ./order_service  # Comment dòng này
-    container_name: order-service
-    ports:
-      - "3003:3003"
-    depends_on:
-      - order-db
-    restart: unless-stopped
+# Ví dụ:
+# FROM: image: YOUR_DOCKER_USERNAME/auth-service:latest
+# TO:   image: mixx23u/auth-service:latest
 ```
 
-**Thay `YOUR_DOCKER_USERNAME`** bằng username Docker Hub của bạn!
+**Lưu ý:** 
+- ✅ File `docker-compose.yml` giữ nguyên (dùng cho development local)
+- ✅ File `docker-compose.prod.yml` dùng trên VPS (pull từ Docker Hub)
+- ✅ Workflow tự động dùng file `.prod` khi deploy
 
 ### Bước 4: Push code lên GitHub
 
