@@ -92,6 +92,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd ~/microservices-demo
+            git pull origin develop
             docker-compose -f docker-compose.prod.yml pull
             docker-compose -f docker-compose.prod.yml down
             docker-compose -f docker-compose.prod.yml up -d
